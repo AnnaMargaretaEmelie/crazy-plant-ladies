@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import { PlantList } from "./components/PlantList";
+import "./App.css";
+import type { Plant } from "./models/Plant";
+import { PlantForm } from "./components/PlantForm";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [plants, setPlants] = useState<Plant[]>([
+    {
+      id: 1,
+      name: "Supersweet",
+      category: "Tomat",
+      isSown: true,
+      status: "Behöver komma ut gradvis",
+    },
+    { id: 2, name: "Habanero", category: "Chili", isSown: true, status: "Ok" },
+  ]);
 
+  const addPlant = (plant: Plant) => {
+    setPlants((prev) => [...prev, plant]);
+  };
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <main>
+        <h1>Crazy Plant Ladies Society</h1>
+        <PlantForm addPlant={addPlant}></PlantForm>
+        <PlantList plants={plants} />
+      </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
