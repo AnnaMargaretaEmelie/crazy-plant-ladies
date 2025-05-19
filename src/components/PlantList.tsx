@@ -1,18 +1,21 @@
 import type { Plant } from "../models/Plant";
+import { PlantItem } from "./PlantItem";
 
 type PlantProps = {
   plants: Plant[];
+  toggleSown: (id: number) => void;
 };
 
-export const PlantList = ({ plants }: PlantProps) => {
+export const PlantList = ({ plants, toggleSown }: PlantProps) => {
   return (
     <>
       <ul>
         {plants.map((plant) => (
-          <li key={plant.id}>
-            {plant.name} ({plant.category}) -{" "}
-            {plant.isSown ? "Sådd" : "Inte sådd"}
-          </li>
+          <PlantItem
+            key={plant.id}
+            plant={plant}
+            toggleSown={toggleSown}
+          ></PlantItem>
         ))}
       </ul>
     </>

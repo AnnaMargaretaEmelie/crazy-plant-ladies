@@ -19,12 +19,19 @@ function App() {
   const addPlant = (plant: Plant) => {
     setPlants((prev) => [...prev, plant]);
   };
+  const toggleSown = (id: number) => {
+    setPlants((prev) =>
+      prev.map((plant) =>
+        plant.id === id ? { ...plant, isSown: !plant.isSown } : plant
+      )
+    );
+  };
   return (
     <>
       <main>
         <h1>Crazy Plant Ladies Society</h1>
         <PlantForm addPlant={addPlant}></PlantForm>
-        <PlantList plants={plants} />
+        <PlantList plants={plants} toggleSown={toggleSown} />
       </main>
     </>
   );
