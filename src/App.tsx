@@ -16,6 +16,8 @@ function App() {
     { id: 2, name: "Habanero", category: "Chili", isSown: true, status: "Ok" },
   ]);
 
+  const [filter, setFilter] = useState<"all" | "sown" | "notSown">("all");
+
   const addPlant = (plant: Plant) => {
     setPlants((prev) => [...prev, plant]);
   };
@@ -26,12 +28,24 @@ function App() {
       )
     );
   };
+
+  const filteredPlants = plants.filter((plant) => {
+    if (filter === "sown") return plant.isSown;
+    if (filter === "notSown") return !plant.isSown;
+    return true;
+  });
+
   return (
     <>
       <main>
         <h1>Crazy Plant Ladies Society</h1>
         <PlantForm addPlant={addPlant}></PlantForm>
-        <PlantList plants={plants} toggleSown={toggleSown} />
+        <div>
+          <button onClick={() => setFilter("all")}>Visa alla</button>
+          <button onClick={() => setFilter("sown")}>Bara sådda</button>
+          <button onClick={() => setFilter("notSown")}>Bara osådda</button>
+        </div>
+        <PlantList plants={filteredPlants} toggleSown={toggleSown} />
       </main>
     </>
   );
