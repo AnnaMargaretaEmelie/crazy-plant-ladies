@@ -1,20 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlantList } from "./components/PlantList";
 import "./App.css";
 import type { Plant } from "./models/Plant";
 import { PlantForm } from "./components/PlantForm";
 
 function App() {
-  const [plants, setPlants] = useState<Plant[]>([
-    {
-      id: 1,
-      name: "Supersweet",
-      category: "Tomat",
-      isSown: true,
-      status: "Behöver komma ut gradvis",
-    },
-    { id: 2, name: "Habanero", category: "Chili", isSown: true, status: "Ok" },
-  ]);
+  const [plants, setPlants] = useState<Plant[]>(() => {
+    const saved = localStorage.getItem("plants");
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem("plants", JSON.stringify(plants));
+  }, [plants]);
 
   const [filter, setFilter] = useState<"all" | "sown" | "notSown">("all");
 
