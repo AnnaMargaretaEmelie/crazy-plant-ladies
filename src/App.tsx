@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import type { Plant } from "./models/Plant";
 
-import { BrowserRouter, Routes, NavLink, Route } from "react-router";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { Plants } from "./pages/Plants";
 import { AddPlant } from "./pages/AddPlant";
 import { About } from "./pages/About";
+import { Layout } from "./pages/Layout";
 
 function App() {
   const [plants, setPlants] = useState<Plant[]>(() => {
@@ -33,30 +34,27 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <header>
-          <h1>Crazy Plant Ladies Society</h1>
-          <nav>
-            <NavLink to={"/plants"}>Mina plantor</NavLink>| {""}
-            <NavLink to={"/addplant"}>Lägg till planta</NavLink>| {""}
-            <NavLink to={"/about"}>Om sidan</NavLink>
-          </nav>
-        </header>
         <Routes>
-          <Route
-            path="/plants"
-            element={
-              <Plants
-                plants={plants}
-                toggleSown={toggleSown}
-                filter={filter}
-                setFilter={setFilter}
-              />
-            }
-          />
-          <Route path="/addplant" element={<AddPlant addPlant={addPlant} />} />
-
-          <Route path="/about" element={<About />} />
-          <Route path="*" element={<p>Sidan finns inte</p>} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Navigate to="plants" />} />
+            <Route
+              path="plants"
+              element={
+                <Plants
+                  plants={plants}
+                  toggleSown={toggleSown}
+                  filter={filter}
+                  setFilter={setFilter}
+                />
+              }
+            />
+            <Route
+              path="addplant"
+              element={<AddPlant addPlant={addPlant}></AddPlant>}
+            />
+            <Route path="about" element={<About />} />
+            <Route path="*" element={<p>Sidan finns inte</p>} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
