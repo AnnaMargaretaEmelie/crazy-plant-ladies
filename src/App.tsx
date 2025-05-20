@@ -1,31 +1,62 @@
-import { useState } from "react";
-import { PlantList } from "./components/PlantList";
+import { useEffect, useState } from "react";
+
 import "./App.css";
 import type { Plant } from "./models/Plant";
-import { PlantForm } from "./components/PlantForm";
+
+import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { Plants } from "./pages/Plants";
+import { AddPlant } from "./pages/AddPlant";
+import { About } from "./pages/About";
+import { Layout } from "./pages/Layout";
 
 function App() {
-  const [plants, setPlants] = useState<Plant[]>([
-    {
-      id: 1,
-      name: "Supersweet",
-      category: "Tomat",
-      isSown: true,
-      status: "Behöver komma ut gradvis",
-    },
-    { id: 2, name: "Habanero", category: "Chili", isSown: true, status: "Ok" },
-  ]);
+  const [plants, setPlants] = useState<Plant[]>(() => {
+    const saved = localStorage.getItem("plants");
+    return saved ? JSON.parse(saved) : [];
+  });
+  useEffect(() => {
+    localStorage.setItem("plants", JSON.stringify(plants));
+  }, [plants]);
+
+  const [filter, setFilter] = useState<"all" | "sown" | "notSown">("all");
 
   const addPlant = (plant: Plant) => {
     setPlants((prev) => [...prev, plant]);
   };
+  const toggleSown = (id: number) => {
+    setPlants((prev) =>
+      prev.map((plant) =>
+        plant.id === id ? { ...plant, isSown: !plant.isSown } : plant
+      )
+    );
+  };
+
   return (
     <>
-      <main>
-        <h1>Crazy Plant Ladies Society</h1>
-        <PlantForm addPlant={addPlant}></PlantForm>
-        <PlantList plants={plants} />
-      </main>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Navigate to="plants" />} />
+            <Route
+              path="plants"
+              element={
+                <Plants
+                  plants={plants}
+                  toggleSown={toggleSown}
+                  filter={filter}
+                  setFilter={setFilter}
+                />
+              }
+            />
+            <Route
+              path="addplant"
+              element={<AddPlant addPlant={addPlant}></AddPlant>}
+            />
+            <Route path="about" element={<About />} />
+            <Route path="*" element={<p>Sidan finns inte</p>} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
   );
 }
