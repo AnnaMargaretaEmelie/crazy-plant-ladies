@@ -1,11 +1,12 @@
-import type { Plant } from "../models/Plant";
 import { PlantForm } from "../components/PlantForm";
+import { usePlants } from "../context/usePlants";
 
-type Props = {
-  addPlant: (plant: Plant) => void;
-};
+// type Props = {
+//   addPlant: (plant: Plant) => void;
+// };
 
-export const AddPlant = ({ addPlant }: Props) => {
+export const AddPlant = () => {
+  const { addPlant } = usePlants();
   return (
     <>
       <section>
