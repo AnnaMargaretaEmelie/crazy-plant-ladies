@@ -31,7 +31,6 @@ export function PlantForm({ addPlant }: FormProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <h2>Lägg till ny planta</h2>
         <div>
           <label htmlFor="name">
             Namn:
