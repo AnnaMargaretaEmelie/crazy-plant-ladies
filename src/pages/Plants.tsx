@@ -1,19 +1,20 @@
-import type { Plant } from "../models/Plant";
 import { PlantList } from "../components/PlantList";
+import { usePlants } from "../context/usePlants";
 
-type Props = {
-  plants: Plant[];
-  toggleSown: (id: number) => void;
-  filter: "all" | "sown" | "notSown";
-  setFilter: (filter: "all" | "sown" | "notSown") => void;
-};
+// type Props = {
+//   filter: "all" | "sown" | "notSown";
+//   setFilter: (filter: "all" | "sown" | "notSown") => void;
+// };
 
-export const Plants = ({ plants, toggleSown, filter, setFilter }: Props) => {
+export const Plants = () => {
+  const { plants, toggleSown, filter, setFilter } = usePlants();
+
   const filteredPlants = plants.filter((plant) => {
     if (filter === "sown") return plant.isSown;
     if (filter === "notSown") return !plant.isSown;
     return true;
   });
+
   return (
     <>
       <section>
